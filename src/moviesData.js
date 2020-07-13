@@ -4,7 +4,7 @@ export const moviesData = [
     id: 299536,
     video: false,
     vote_average: 8.5,
-    title: "Avengers: Infinity Wars",
+    title: "Avengers: Infinity Wars2",
     popularity: 160.36938,
     poster_path: "/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
     original_language: "en",
