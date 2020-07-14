@@ -1,12 +1,10 @@
 import React from "react";
+import { moviesData } from "../moviesData";
 
-const movie = {
-  title: "Avengers: Infinity Wars",
-  vote_average: 8.5,
-  image: "https://image.tmdb.org/t//p/w500/bOGkgRGdhrBYJSLpXaxhXVstddV.jpg",
-  overview:
-    "As the Avengers and their allies have continued to protect the world from threats too large for any one hero to handle, a new danger has emerged from the cosmic shadows: Thanos. A despot of intergalactic infamy, his goal is to collect all six Infinity Stones, artifacts of unimaginable power, and use them to inflict his twisted will on all of reality. Everything the Avengers have fought for has led up to this moment - the fate of Earth and existence itself has never been more uncertain."
-};
+console.log(moviesData[0].title);
+
+const movie = moviesData[0];
+movie.image = "https://image.tmdb.org/t//p/w500" + movie.backdrop_path;
 
 class Image extends React.Component {
   render() {
@@ -70,12 +68,30 @@ class MovieItem extends React.Component {
   }
 }
 
-function App() {
-  return (
-    <div>
-      <MovieItem data={movie} />
-    </div>
-  );
+class App extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      movies: moviesData
+    };
+  }
+
+  render() {
+    return (
+      <div>
+        <div>
+          <MovieItem data={movie} />
+        </div>
+
+        <div>
+          {this.state.movies.map(item => {
+            return <p>{item.title}</p>;
+          })}
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;
