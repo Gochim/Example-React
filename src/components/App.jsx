@@ -1,12 +1,10 @@
 import React from "react";
 // import { moviesData } from "../moviesData";
 import MovieItem from "./MovieItem";
+import MovieTabs from "./MovieTabs";
 
 const API_URL = "https://api.themoviedb.org/3";
 const API_KEY_3 = "3f4ca4f3a9750da53450646ced312397";
-
-// const movie = moviesData[0];
-// movie.image = "https://image.tmdb.org/t//p/w500" + movie.backdrop_path;
 
 class App extends React.Component {
   constructor() {
@@ -14,13 +12,18 @@ class App extends React.Component {
 
     this.state = {
       movies: [],
-      moviesWillWatch: []
+      moviesWillWatch: [],
+      sort_by: "popularity.desc"
     };
   }
 
   componentDidMount() {
     console.log("did mount");
-    fetch(`${API_URL}/discover/movie?api_key=${API_KEY_3}`)
+    fetch(
+      `${API_URL}/discover/movie?api_key=${API_KEY_3}&sort_by=${
+        this.state.sort_by
+      }`
+    )
       .then(response => {
         return response.json();
       })
@@ -51,17 +54,30 @@ class App extends React.Component {
     this.setState({ movies: updateMovie });
   };
 
+  updateSortBy = value => {
+    this.setState({
+      sort_by: value
+    });
+  };
+
   render() {
     return (
       <div className="container">
-        <div className="row">
+        <div className="row mt-4">
           <div className="col-9">
+            <div className="row mb-4">
+              <div className="col-12">
+                <MovieTabs
+                  sort_by={this.state.sort_by}
+                  updateSortBy={this.updateSortBy}
+                />
+              </div>
+            </div>
             <div className="row">
               {this.state.movies.map(movie => {
                 return (
                   <div key={movie.id} className="col-6 mb-4">
                     <MovieItem
-                      key={movie.id}
                       movie={movie}
                       removeMovie={this.removeMovie}
                       addMovieToWIllWatch={this.addMovieToWIllWatch}
