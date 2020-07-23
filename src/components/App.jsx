@@ -19,19 +19,13 @@ class App extends React.Component {
 
   componentDidMount() {
     console.log("did mount");
-    fetch(
-      `${API_URL}/discover/movie?api_key=${API_KEY_3}&sort_by=${
-        this.state.sort_by
-      }`
-    )
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        this.setState({
-          movies: data.results
-        });
-      });
+    this.getMovies();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.sort_by !== this.state.sort_by) {
+      this.getMovies();
+    }
   }
 
   addMovieToWIllWatch = movie => {
@@ -45,6 +39,22 @@ class App extends React.Component {
       return movie.id !== item.id;
     });
     this.setState({ moviesWillWatch: updateMoviesWillWatch });
+  };
+
+  getMovies = () => {
+    fetch(
+      `${API_URL}/discover/movie?api_key=${API_KEY_3}&sort_by=${
+        this.state.sort_by
+      }`
+    )
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        this.setState({
+          movies: data.results
+        });
+      });
   };
 
   removeMovie = movie => {
