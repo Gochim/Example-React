@@ -1,4 +1,5 @@
 import React from "react";
+import classNames from "classnames";
 
 class MovieTabs extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -9,17 +10,13 @@ class MovieTabs extends React.Component {
     const { sort_by, updateSortBy } = this.props;
     const handleCLick = value => () => updateSortBy(value);
 
-    console.log("MovieTabs render");
-
-    const getClassLink = value => {
-      return `nav-link ${sort_by === value ? "active" : ""}`;
-    };
-
     return (
       <ul className="tabs nav nav-pills">
         <li className="nav-item">
           <div
-            className={getClassLink("popularity.desc")}
+            className={classNames("nav-link", {
+              active: sort_by === "popularity.desc"
+            })}
             onClick={handleCLick("popularity.desc")}
           >
             Popularity desc
@@ -27,7 +24,9 @@ class MovieTabs extends React.Component {
         </li>
         <li className="nav-item">
           <div
-            className={getClassLink("revenue.desc")}
+            className={classNames("nav-link", {
+              active: sort_by === "revenue.desc"
+            })}
             onClick={handleCLick("revenue.desc")}
           >
             Revenue desc
@@ -35,7 +34,9 @@ class MovieTabs extends React.Component {
         </li>
         <li className="nav-item">
           <div
-            className={getClassLink("vote_average.desc")}
+            className={classNames("nav-link", {
+              active: sort_by === "vote_average.desc"
+            })}
             onClick={handleCLick("vote_average.desc")}
           >
             Vote average

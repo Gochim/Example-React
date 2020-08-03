@@ -2,6 +2,7 @@ import React from "react";
 // import { moviesData } from "../moviesData";
 import MovieItem from "./MovieItem";
 import MovieTabs from "./MovieTabs";
+import PageSelector from "./PageSelector";
 
 const API_URL = "https://api.themoviedb.org/3";
 const API_KEY_3 = "3f4ca4f3a9750da53450646ced312397";
@@ -13,7 +14,9 @@ class App extends React.Component {
     this.state = {
       movies: [],
       moviesWillWatch: [],
-      sort_by: "popularity.desc"
+      sort_by: "popularity.desc",
+      page: 1,
+      totalPages: 1
     };
   }
 
@@ -24,6 +27,8 @@ class App extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.sort_by !== this.state.sort_by) {
+      this.getMovies();
+    } else if (prevState.page !== this.state.page) {
       this.getMovies();
     }
   }
@@ -41,18 +46,32 @@ class App extends React.Component {
     this.setState({ moviesWillWatch: updateMoviesWillWatch });
   };
 
+  prevPage = page => {
+    this.setState({
+      page: page - 1
+    });
+  };
+
+  nextPage = page => {
+    this.setState({
+      page: page + 1
+    });
+  };
+
   getMovies = () => {
     fetch(
       `${API_URL}/discover/movie?api_key=${API_KEY_3}&sort_by=${
         this.state.sort_by
-      }`
+      }&page=${this.state.page}`
     )
       .then(response => {
         return response.json();
       })
       .then(data => {
         this.setState({
-          movies: data.results
+          movies: data.results,
+          page: data.page,
+          totalPages: data.total_pages
         });
       });
   };
@@ -66,7 +85,9 @@ class App extends React.Component {
 
   updateSortBy = value => {
     this.setState({
-      sort_by: value
+      sort_by: value,
+      // Reset the page count
+      page: 1
     });
   };
 
@@ -80,6 +101,16 @@ class App extends React.Component {
                 <MovieTabs
                   sort_by={this.state.sort_by}
                   updateSortBy={this.updateSortBy}
+                />
+              </div>
+            </div>
+            <div className="row mb-4">
+              <div className="col-12">
+                <PageSelector
+                  page={this.state.page}
+                  totalPages={this.state.totalPages}
+                  prevPage={this.prevPage}
+                  nextPage={this.nextPage}
                 />
               </div>
             </div>
